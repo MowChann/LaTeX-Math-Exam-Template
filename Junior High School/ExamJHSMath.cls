@@ -31,6 +31,7 @@
 \setmainfont{TeX Gyre Termes}
 \newfontfamily\Serif{TeX Gyre Termes}
 
+
 % Overleaf 字体
 \newCJKfontfamily\Kai{FandolKai}
 \newCJKfontfamily\Hei{FandolHei}
@@ -73,7 +74,7 @@
 
 %% 设置各级文本格式
 \setcounter{secnumdepth}{3}
-\titleformat{\chapter}{\zihao {5}}{}{0em}{}
+\titleformat{\chapter}{\zihao{5}}{}{0em}{}
 \titleformat{\section}{\zihao{4}\Hei\centering}{
     第\Roman{section}卷\quad
 }{0em}{}
@@ -83,7 +84,6 @@
 \titleformat{\subsubsection}{\zihao{5}\Hei}{
     第{\chinese{subsubsection}}节\quad
 }{0em}{}
-% \titleformat{\subsection}{\linespread{1}}{第{\bf\chinese{subsection}}部分~~}{0em}{\zihao{5}\linespread{1}}{}
 \titlespacing*{\chapter}{0mm}{0mm}{-10mm}
 \titlespacing*{\section}{0em}{1.25em}{0.5em}
 \titlespacing*{\subsection}{-0.25em}{0em}{0em}
@@ -91,10 +91,9 @@
 
 %% 设置各级文本的编号格式
 \setlist{itemsep=0.2em,topsep=0.25em,partopsep=0pt,parsep=0pt}
-% \setenumerate[1]{label=(\hspace{1.25em})~\arabic*.,leftmargin=3.5em,itemindent=0em,labelsep=0.25em,}
 \setenumerate[1]{label=\arabic*.,leftmargin=1.2em,itemindent=0em,labelsep=0.2em,ref={\arabic*}}
 \setenumerate[2]{label=(\arabic*),leftmargin=1.2em,itemindent=0em,labelsep=0.25em,}
-% \setenumerate[3]{label=(\alph*),leftmargin=1.2em,itemindent=0em,labelsep=0.25em,}
+\setenumerate[3]{label=(\alph*),leftmargin=1.2em,itemindent=0em,labelsep=0.25em,}
 
 
 % ----- 对齐、浮动与并排 -----
@@ -108,11 +107,15 @@
     label-offset=0pt
 }
 
+%% 页面垂直顶端分布
+\raggedbottom
+
 %% 图片右侧浮动显示（可用于 enumerate 环境下）
 \usepackage{packages/sidefig}
+\usepackage{float}
 
 %% 修正元素间距过大问题
-\usepackage{setspace}
+% \usepackage{setspace}
 % \setlength{\parskip}{0.2em}
 
 %% 选择题选项自动排版
@@ -194,6 +197,11 @@
 \usepackage{times}
 \usepackage{newtxtext, newtxmath}
 
+%% 调整数学符号间距
+\thinmuskip=1.3mu
+\medmuskip=1.65mu
+\thickmuskip=1.85mu
+
 %% 国标数学命令定义
 \newcommand{\abs}[1]{\ensuremath{\left\lvert#1\right\rvert}}
 \renewcommand*{\parallel}{\varparallel}
@@ -209,12 +217,12 @@
         \draw (0,.05ex) -- (.7em,.05ex) -- (.9em,1.4ex) -- (.2em,1.4ex) -- cycle; }}
 
 \renewcommand*\triangle{
-    \mathord{
+    \mathbin{
         \tikz[baseline,line width=0.12ex,line join=round]
         \draw(0,.05ex) -- (.7em,.05ex) -- (.35em,1.55ex) -- cycle; }}
 
 \renewcommand*\angle{
-    \mathord{
+    \mathbin{
         \tikz[baseline,line width=0.12ex,line cap=round]
         \draw (0,.08ex) -- (.72em,.08ex)
         (0, .08ex) -- (.68em,1.4ex); }}
@@ -244,7 +252,7 @@
         \draw (-.2em,1.35ex) .. controls (-.46em,1.6ex) and (-.54em,.65ex) .. (-.25em,.65ex) .. controls (-.06em,.65ex) and (.06em,1.35ex) .. (.25em,1.35ex) .. controls (.54em,1.35ex) and (.46em,.4ex) .. (.2em,.65ex) (-.46em,.4ex) -- (.46em,.4ex) (-.46em,0ex) -- (.46em,0ex); }}
 
 \newcommand*\Odot[1][1.1]{
-    \mathord{
+    \mathbin{
         \tikz[baseline,scale=#1]{
             \draw(0,0.32em) circle(0.35em);
             \fill(0,0.32em) circle(0.7pt);
@@ -269,7 +277,7 @@
 \usepackage{caption}
 \captionsetup[figure]{name={Fig.},labelsep=space} 
 \captionsetup{font=small}
-\setlength{\abovecaptionskip}{-0.075ex}
+\setlength{\abovecaptionskip}{0.05ex}
 
 \usepackage{cleveref}
 \crefname{enumi}{}{}
@@ -282,10 +290,22 @@
 % ----- 试卷总标题 -----
 
 \newcommand{\headLine}[4]{
-    {\noindent 
-        % \bf {绝密$\bigstar$启用前 }
-        \vspace*{-3em}
-    }
+    \vspace*{-4em}
+    \begin{center}
+        \zihao{3} #1#2 \\
+        \vspace*{0.25em}
+        \makebox[4em][s]{\zihao{-2}{\XBSong #3}} \\
+        \zihao{4} #4
+        \vspace*{0.75em}
+    \end{center}
+}
+
+\newcommand{\headLineSecret}[4]{
+    \vspace*{-5em}
+    \begin{flushleft}
+        {\Hei 绝密$\bigstar$启用前 }    
+    \end{flushleft}
+    \vspace{-1em}
     \begin{center}
         \zihao{3} #1#2 \\
         \vspace*{0.25em}
@@ -305,8 +325,8 @@
 
 \newcommand{\annotation}{\Kai}
 \newcommand{\hint}[1]{{\Kai (#1)}}
-\newcommand{\score}[1]{ {\Kai (#1分)} }
-\newcommand{\scores}[1]{ {\Hei（本小题满分#1分）} }
+\newcommand{\score}[1]{{\Kai (#1分)}}
+\newcommand{\scores}[1]{{\Hei （本小题满分#1分）}}
 
 \newcommand{\choice}[1]{
     \ifshowAnswer
