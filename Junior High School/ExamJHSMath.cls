@@ -210,6 +210,11 @@
 \renewcommand*{\ge}{\geqslant}
 \renewcommand*{\geq}{\geqslant}
 
+%% 根指数字号增大
+\let\sqrto\sqrt
+\renewcommand\sqrt[2][\relax]{%
+\ifx\relax#1\relax\sqrto{#2}\else{\sqrto[\leftroot{0}\uproot{2}\scriptstyle #1]{#2}}\fi}
+
 %% 国标数学符号绘制
 \newcommand*\parallelogram{
     \mathord{
