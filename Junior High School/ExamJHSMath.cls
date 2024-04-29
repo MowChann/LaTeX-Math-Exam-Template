@@ -1,9 +1,9 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ExamJHSMath}[templates]
+\ProvidesClass{ExamJHSMath}[2024/04/09 v0.92 Template]
 
 \LoadClass[11pt]{book}
 \usepackage[fontset=ubuntu]{ctex}
-\usepackage[bodytextleadingratio=1.5,restoremathleading=true]{zhlineskip}
+\usepackage[bodytextleadingratio=1.75,restoremathleading=true]{zhlineskip}
 \usepackage{geometry}
 \geometry{
     papersize = {182mm, 257mm},
@@ -23,6 +23,8 @@
 
 % \usepackage{xcolor} % 颜色
 % \usepackage{graphbox} 
+% \usepackage{framed}
+% \usepackage{mdframed}
 
 
 % ----- 字体配置 -----
@@ -30,7 +32,6 @@
 \usepackage[T1]{fontenc}
 \setmainfont{TeX Gyre Termes}
 \newfontfamily\Serif{TeX Gyre Termes}
-
 
 % Overleaf 字体
 \newCJKfontfamily\Kai{FandolKai}
@@ -117,6 +118,7 @@
 %% 修正元素间距过大问题
 % \usepackage{setspace}
 % \setlength{\parskip}{0.2em}
+% \linespread{2.0}
 
 %% 选择题选项自动排版
 \usepackage{hlist}
@@ -167,6 +169,21 @@
 }
 
 
+% ----- 配图 -----
+
+\NewDocumentCommand\figureline{ o m }{
+\begin{figure}[htp] \centering
+\vspace*{-1ex}
+    \IfNoValueTF{#1}{
+        \includegraphics{figures/#2}
+    }{
+        \includegraphics[height=#1em]{figures/#2}
+    }
+\vspace*{-2.5ex}
+\end{figure}
+}
+
+  
 % ----- 页码、页眉与页脚 -----
 
 \usepackage{lastpage} % 页码
@@ -320,6 +337,14 @@
     \end{center}
 }
 
+\newcommand{\headLineSimple}[1]{
+    \vspace*{-4em}
+    \begin{center}
+        \zihao{3} #1
+    \end{center}
+    \vspace*{2em}
+}
+
 
 % ----- 题目括号、填空 -----
 
@@ -341,14 +366,27 @@
     \fi
     \par % 防止 choice 与 options 不双换行时影响括号右对齐
 }
-\newcommand{\blank}[2][1.25]{
-    \ifshowAnswer
-        \uline{\makebox[#1cm][c]{\textcolor{red}{#2}}}
-    \else
-        \uline{\makebox[#1cm][c]{}}
-    \fi
-}
-
+% \newcommand{\blank}[2][1.25]{
+%     \ifshowAnswer
+%         \uline{\makebox[#1cm][c]{\textcolor{red}{#2}}}
+%     \else
+%         \uline{\makebox[#1cm][c]{}}
+%     \fi
+% }
+% \newcommand{\piece}{\hskip1sp\kern-1sp\hbox to .5cm{\hrulefill}}
+\newcommand{\piece}{\hskip0pt minus 3pt\hbox to .5cm{\hrulefill}}
+\newcommand{\nbpiece}{\hbox to .5cm{\hrulefill}}
+\makeatletter
+\newcommand{\build}[2]{\leavevmode
+  \count@=\z@ \toks@={}%
+  \loop\ifnum\count@<\numexpr#1\relax
+    \toks@=\expandafter{\the\toks@#2}%
+    \advance\count@\@ne
+  \repeat
+  \the\toks@}
+\makeatletter
+\newcommand{\blank}[2][2]{%
+  \build{1}{\nbpiece}\build{2*(#1-1)}{\piece}\build{1}{\nbpiece}}
 
 % ----- 题目章节文本与描述 -----
 
